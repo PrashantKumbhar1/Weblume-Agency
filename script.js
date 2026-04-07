@@ -126,7 +126,9 @@ function initPortfolioSlider() {
 
     // Clone items for infinite loop illusion multiple times to ensure enough width
     const items = Array.from(track.children);
-    for (let i = 0; i < 4; i++) {
+    // Use an odd number of copies (e.g. 7) so total sets (original + copies) is even (8).
+    // This makes track.scrollWidth / 2 perfectly aligned with the start of a set.
+    for (let i = 0; i < 7; i++) {
         items.forEach(item => {
             const clone = item.cloneNode(true);
             track.appendChild(clone);

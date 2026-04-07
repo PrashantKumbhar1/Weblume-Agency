@@ -1680,7 +1680,7 @@ h4 { font-size: clamp(1.1rem, 1.5vw, 1.3rem); }
     padding: 0 5vw;
     /* For JS drag-scroll */
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    /* scroll-snap-type removed for smooth automatic scrolling */
     scrollbar-width: none;
     cursor: grab;
 }
@@ -1695,7 +1695,7 @@ h4 { font-size: clamp(1.1rem, 1.5vw, 1.3rem); }
 
 .portfolio-slider-card {
     flex: 0 0 450px;
-    scroll-snap-align: center;
+    /* scroll-snap-align removed for smooth automatic scrolling */
     background: var(--bg-card);
     border-radius: 20px;
     border: 1px solid var(--border-light);

@@ -118,33 +118,65 @@ function initReveal() {
 }
 
 // ==========================================
-// PORTFOLIO HOVER PREVIEW (Homepage list)
+// PORTFOLIO SLIDER (Infinite & Draggable)
 // ==========================================
-function initPortfolioHover() {
-    const preview = document.getElementById('portfolioPreview');
-    const previewInner = document.getElementById('portfolioPreviewInner');
-    if (!preview) return;
-    const items = document.querySelectorAll('.portfolio-item');
-    let mx = 0, my = 0, px = 0, py = 0;
-    items.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            const bg = item.dataset.bg || 'linear-gradient(135deg,#6366f1,#a855f7)';
-            const name = item.dataset.name || '';
-            previewInner.style.background = bg;
-            previewInner.textContent = name;
-            preview.classList.add('active');
+function initPortfolioSlider() {
+    const track = document.getElementById('portfolioSlider');
+    if (!track) return;
+
+    // Clone items for infinite loop illusion multiple times to ensure enough width
+    const items = Array.from(track.children);
+    for (let i = 0; i < 4; i++) {
+        items.forEach(item => {
+            const clone = item.cloneNode(true);
+            track.appendChild(clone);
         });
-        item.addEventListener('mouseleave', () => preview.classList.remove('active'));
-        item.addEventListener('mousemove', (e) => { mx = e.clientX + 20; my = e.clientY - 110; });
-    });
-    function animate() {
-        px += (mx - px) * 0.15;
-        py += (my - py) * 0.15;
-        preview.style.left = px + 'px';
-        preview.style.top = py + 'px';
-        requestAnimationFrame(animate);
     }
-    animate();
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let isHovering = false;
+    let autoScrollSpeed = 1;
+
+    // Manual Dragging
+    track.addEventListener('mousedown', (e) => {
+        isDown = true;
+        track.style.cursor = 'grabbing';
+        startX = e.pageX - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+    });
+    track.addEventListener('mouseleave', () => {
+        isDown = false;
+        track.style.cursor = 'grab';
+    });
+    track.addEventListener('mouseup', () => {
+        isDown = false;
+        track.style.cursor = 'grab';
+    });
+    track.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - track.offsetLeft;
+        const walk = (x - startX) * 2; // Scroll-fast
+        track.scrollLeft = scrollLeft - walk;
+    });
+
+    // Auto Scrolling loop
+    track.addEventListener('mouseenter', () => isHovering = true);
+    track.addEventListener('mouseleave', () => isHovering = false);
+
+    function autoScroll() {
+        if (!isHovering && !isDown) {
+            track.scrollLeft += autoScrollSpeed;
+            // Reset if scrolled to halfway
+            if (track.scrollLeft >= track.scrollWidth / 2) {
+                track.scrollLeft = 0;
+            }
+        }
+        requestAnimationFrame(autoScroll);
+    }
+    autoScroll();
 }
 
 // ==========================================
@@ -427,16 +459,40 @@ function showcaseScrollHandler() {
 window.addEventListener('scroll', showcaseScrollHandler, { passive: true });
 
 // ==========================================
+// INSTAGRAM REELS INTERACTIVITY
+// ==========================================
+function toggleReel(card) {
+    const videoSrc = card.querySelector('video').getAttribute('src');
+    const modal = document.getElementById('reelModal');
+    const modalVideo = document.getElementById('reelModalVideo');
+    if (!modal || !modalVideo || !videoSrc) return;
+
+    modalVideo.src = videoSrc;
+    modal.classList.add('active');
+    modalVideo.play().catch(e => console.error("Video play failed:", e));
+}
+
+function closeReelModal() {
+    const modal = document.getElementById('reelModal');
+    const modalVideo = document.getElementById('reelModalVideo');
+    if (modal) {
+        modal.classList.remove('active');
+        if (modalVideo) {
+            modalVideo.pause();
+            modalVideo.src = '';
+        }
+    }
+}
+
+// ==========================================
 // INIT
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     createOrbitIcons();
     initReveal();
-    initPortfolioHover();
+    initPortfolioSlider();
     initTestimonials();
-    initFormTags();
     initFilters();
-    showFormStep(0);
 });
 
 document.addEventListener('visibilitychange', () => {

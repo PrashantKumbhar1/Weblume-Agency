@@ -60,7 +60,8 @@
          ============================================================ -->
     <div class="page active" id="page-home">
 
-        <section class="hero-full-image" id="hero">
+        <!-- DESKTOP HERO (Hidden on mobile) -->
+        <section class="hero-full-image hero-desktop" id="hero-desktop">
             <svg width="100%" height="100%" viewBox="0 0 2752 1536" preserveAspectRatio="xMinYMid slice" class="hero-svg">
                 <image href="assets/Hero_no_watermark.png" x="0" y="0" width="2752" height="1536" />
                 
@@ -74,6 +75,29 @@
                     <rect x="700" y="950" width="450" height="150" fill="transparent" />
                 </a>
             </svg>
+        </section>
+
+        <!-- MOBILE HERO (Hidden on desktop) -->
+        <section class="hero-mobile" id="hero-mobile">
+            <!-- Background Photo -->
+            <img class="hero-mobile-photo" src="assets/Hero_mob.png" alt="Weblume Hero Background">
+            
+            <!-- Sleek Gradient Overlay -->
+            <div class="hero-mobile-overlay"></div>
+            
+            <div class="hero-mobile-content">
+                <h1 class="hero-mobile-title reveal">We Craft<br><span class="gradient-text">Digital</span> Experiences</h1>
+                <p class="hero-mobile-desc reveal reveal-d1">We design and develop high-performance websites and Android apps that transform ideas into measurable results.</p>
+                
+                <div class="hero-mobile-actions reveal reveal-d2">
+                    <a onclick="navigateTo('contact')" class="btn-mobile-primary">
+                        <span class="btn-mobile-glow"></span>
+                        <span class="btn-mobile-text">Start Your Project</span>
+                    </a>
+                    <a onclick="navigateTo('work')" class="btn-mobile-outline">View Our Work</a>
+                </div>
+            </div>
+
         </section>
 
         <!-- CLIENTS MARQUEE -->
